@@ -21,7 +21,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://20.121.141.248:5000/assignment/feb/sde_fe');
+        const response = await fetch('http://localhost:8080/fetch-and-store-data');
         const responseData = await response.json();
 
         if (Array.isArray(responseData.data)) {
