@@ -3,6 +3,7 @@ import ReactPaginate from 'react-paginate';
 import Piechart from './Piechart';
 import Barchart from './Barchart';
 import StackedBar from './Stackedbar'; 
+import axios from 'axios';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -21,13 +22,13 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/fetch-and-store-data');
-        const responseData = await response.json();
+        const response = await axios.get('http://localhost:8080/fetch-and-store-data');
+        const responseData = response.data;
 
-        if (Array.isArray(responseData.data)) {
+        if (responseData && Array.isArray(responseData.data)) {
           setData(responseData.data);
         } else {
-          console.error('Data property is not an array:', responseData.data);
+          console.error('Data property is not an array:', responseData && responseData.data);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -36,6 +37,7 @@ const Dashboard = () => {
 
     fetchData();
   }, []);
+  
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
