@@ -265,7 +265,6 @@ const Dashboard = () => {
             bars={[
               { dataKey: '0', color: '#8884d8' },
               { dataKey: '1', color: '#82ca9d' },
-              // Add more bars if you have additional vehicle CC values
             ]}
           />
         </div>

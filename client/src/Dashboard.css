@@ -1,12 +1,12 @@
 .dashboard-container {
   margin: 20px;
-  background-color: #f1fff0; /* Light Blue Background Color */
+  background-color: #f1fff0;
 }
 
 .dashboard-controls {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px; /* Decreased margin for less spacing */
+  margin-bottom: 10px; 
 }
 
 .dashboard-controls input,
@@ -37,8 +37,6 @@
   transition: background-color 0.3s;
 }
 
-/* Dashboard.css */
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -51,7 +49,7 @@
   font-weight: bold;
   padding: 10px;
   margin: 0 5px;
-  border-radius: 50%; /* Use 50% for a fully rounded button */
+  border-radius: 50%;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -62,12 +60,12 @@
 .pagination .active {
   background-color: rgb(221, 137, 137);
   color: #fff;
-  border-radius: 50%; /* Use 50% for a fully rounded button */
+  border-radius: 50%;
 }
 .legend-container {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 10px; /* Added margin for spacing between legend and pie chart */
+  margin-top: 10px;
 }
 
 .legend-item {
@@ -90,7 +88,7 @@
 
 .charts-container {
   display: flex;
-  justify-content: space-around; /* Adjusted space between charts */
+  justify-content: space-around;
   margin: 20px;
 }
 
