@@ -21,7 +21,7 @@ const Dashboard = () => {
   const itemsPerPage = 10;
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/data');
+      const response = await axios.get('https://altor-assignment.onrender.com');
       const responseData = await response?.data?.data;
       setData(responseData)
     } catch (error) {
