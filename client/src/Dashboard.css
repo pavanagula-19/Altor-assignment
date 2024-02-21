@@ -1,24 +1,30 @@
+
+
 .dashboard-container {
   margin: 20px;
   background-color: #f1fff0;
+  overflow-x: auto; /* Add horizontal scrolling for smaller screens */
 }
 
 .dashboard-controls {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
 .dashboard-controls input,
 .dashboard-controls select {
-  margin-right: 10px;
+  margin-bottom: 10px;
   padding: 8px;
+  flex: 1;
 }
 
 .dashboard-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  overflow-x: auto; /* Add horizontal scrolling for smaller screens */
 }
 
 .dashboard-table th,
@@ -26,6 +32,7 @@
   border: 1px solid #ddd;
   padding: 12px;
   text-align: left;
+  white-space: nowrap; /* Prevent text wrapping within table cells */
 }
 
 .dashboard-table th {
@@ -62,6 +69,7 @@
   color: #fff;
   border-radius: 50%;
 }
+
 .legend-container {
   display: flex;
   flex-wrap: wrap;
@@ -88,6 +96,7 @@
 
 .charts-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
   margin: 20px;
 }
@@ -96,9 +105,25 @@
 .barchart-container,
 .stackedbar-container {
   flex: 1;
-  margin-right: 20px;
+  margin-bottom: 20px;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 10px;
 }
 
+@media (max-width: 768px) {
+  .dashboard-controls input,
+  .dashboard-controls select {
+    flex: 100%;
+  }
+
+  .charts-container {
+    flex-direction: column;
+  }
+
+  .pie-chart-container,
+  .barchart-container,
+  .stackedbar-container {
+    flex: 100%;
+  }
+}
