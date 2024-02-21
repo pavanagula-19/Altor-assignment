@@ -22,9 +22,9 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/data');
+      const response = await axios.get('https://altor-assignment.onrender.com/data');
       const responseData = await response?.data?.data;
-      console.log(responseData)
+      console.log(response)
       setData(responseData)
     } catch (error) {
       console.error('Error fetching data:', error);
