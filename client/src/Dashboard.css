@@ -2,13 +2,13 @@
 
 .dashboard-container {
   margin: 20px;
-  background-color: #f0f8ff; /* Light Blue Background Color */
+  background-color: #f1fff0; /* Light Blue Background Color */
 }
 
 .dashboard-controls {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 10px; /* Decreased margin for less spacing */
 }
 
 .dashboard-controls input,
@@ -65,4 +65,42 @@
   background-color: rgb(221, 137, 137);
   color: #fff;
   border-radius: 50%; /* Use 50% for a fully rounded button */
+}
+
+.pie-chart-container {
+  flex: 1;
+  margin-right: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.legend-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px; /* Added margin for spacing between legend and pie chart */
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  margin-bottom: 5px;
+}
+
+.legend-color {
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  border-radius: 50%;
+}
+
+.legend-label {
+  font-size: 12px;
+}
+
+.charts-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
 }
