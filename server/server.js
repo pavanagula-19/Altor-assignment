@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const axios = require('axios');
-const cors = require('cors'); 
+const cors = require('cors');
 const DataModel = require('./models/Schema');
 const dotenv = require('dotenv');
 
@@ -19,20 +18,18 @@ const database = mongoose.connect(process.env.DATABASE_URI)
 
 app.get('/data', async (req, res) => {
   try {
-    const response = await axios.get('http://20.121.141.248:5000/assignment/feb/sde_fe');
-    const responseData = response.data;
+    const data = await DataModel.find();
 
-    if (Array.isArray(responseData.data)) {
-      await DataModel.insertMany(responseData.data);
-      console.log('Data inserted into MongoDB');
-      res.status(200).json({ responseData });
+    if (data && data.length > 0) {
+      console.log('Data fetched from MongoDB');
+      res.status(200).json({ success: true, data });
     } else {
-      console.error('Data property is not an array:', responseData.data);
-      res.status(500).json({ success: false, message: 'Error: Data property is not an array' });
+      console.error('No data found in the database');
+      res.status(404).json({ success: false, message: 'No data found in the database' });
     }
   } catch (error) {
-    console.error('Error fetching and storing data:', error);
-    res.status(500).json({ success: false, message: 'Error fetching and storing data' });
+    console.error('Error fetching data:', error);
+    res.status(500).json({ success: false, message: 'Error fetching data from the database' });
   }
 });
 

@@ -22,17 +22,16 @@ const Dashboard = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get('http://localhost:8080/data');
-      const responseData = await response?.data?.responseData?.data;
+      const responseData = await response?.data?.data;
       setData(responseData)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
+
   useEffect(() => {
-    console.log('iam in')
     fetchData();
   }, []);
-  
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
