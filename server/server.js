@@ -6,6 +6,7 @@ dotenv.config();
 const DataModel = require('./models/Schema')
 
 const app = express();
+app.use(cors());
 const database = require('./database');
 database.db;
 app.get('/data', async (req, res) => {
