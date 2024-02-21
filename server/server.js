@@ -17,7 +17,7 @@ const database = mongoose.connect(process.env.DATABASE_URI)
     console.error('MongoDB connection error:', error);
   });
 
-app.get('/fetch-and-store-data', async (req, res) => {
+app.get('/data', async (req, res) => {
   try {
     const response = await axios.get('http://20.121.141.248:5000/assignment/feb/sde_fe');
     const responseData = response.data;

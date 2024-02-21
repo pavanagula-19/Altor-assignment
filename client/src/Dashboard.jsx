@@ -5,9 +5,10 @@ import Barchart from './Barchart';
 import StackedBar from './Stackedbar'; 
 import axios from 'axios';
 import './Dashboard.css';
+import Spinner from './Spinner';
 
 const Dashboard = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     zone: '',
@@ -18,23 +19,17 @@ const Dashboard = () => {
   });
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
-
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/data');
+      const responseData = await response?.data?.responseData?.data;
+      setData(responseData)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/fetch-and-store-data');
-        const responseData = response.data;
-
-        if (responseData && Array.isArray(responseData.data)) {
-          setData(responseData.data);
-        } else {
-          console.error('Data property is not an array:', responseData && responseData.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
+    console.log('iam in')
     fetchData();
   }, []);
   
@@ -47,18 +42,7 @@ const Dashboard = () => {
     setFilters({ ...filters, [filterType]: value });
   };
 
-  const applyFilters = () => {
-    return data.filter((item) => {
-      return (
-        item.username.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        (filters.zone ? item.zone === filters.zone : true) &&
-        (filters.deviceBrand ? item.device_brand === filters.deviceBrand : true) &&
-        (filters.vehicleBrand ? item.vehicle_brand === filters.vehicleBrand : true) &&
-        (filters.vehicleCC ? item.vehicle_cc === filters.vehicleCC : true) &&
-        (filters.sdkInt ? item.sdk_int.toString() === filters.sdkInt : true)
-      );
-    });
-  };
+  
 
   const calculateDistribution = (field) => {
     const fieldData = data.map((item) => item[field]);
@@ -81,8 +65,20 @@ const Dashboard = () => {
     return color;
   };
 
-  const filteredItems = applyFilters();
-  const pageCount = Math.ceil(filteredItems.length / itemsPerPage);
+  
+    const  filteredItems = data?.filter((item) => {
+        return (
+          item.username.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (filters.zone ? item.zone === filters.zone : true) &&
+          (filters.deviceBrand ? item.device_brand === filters.deviceBrand : true) &&
+          (filters.vehicleBrand ? item.vehicle_brand === filters.vehicleBrand : true) &&
+          (filters.vehicleCC ? item.vehicle_cc === filters.vehicleCC : true) &&
+          (filters.sdkInt ? item.sdk_int.toString() === filters.sdkInt : true)
+          );
+        });
+     
+
+  const pageCount = data ?  Math.ceil(filteredItems?.length / itemsPerPage) : 0
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -103,7 +99,7 @@ const Dashboard = () => {
 
   const calculateVehicleBrandDistribution = () => {
     const distribution = [];
-    const groupedByBrand = filteredItems.reduce((acc, item) => {
+    const groupedByBrand = filteredItems?.reduce((acc, item) => {
       acc[item.vehicle_brand] = (acc[item.vehicle_brand] || 0) + 1;
       return acc;
     }, {});
@@ -115,7 +111,7 @@ const Dashboard = () => {
 
   const calculateSDKIntDistribution = () => {
     const distribution = [];
-    const groupedBySDKInt = filteredItems.reduce((acc, item) => {
+    const groupedBySDKInt = filteredItems?.reduce((acc, item) => {
       acc[item.sdk_int] = (acc[item.sdk_int] || 0) + 1;
       return acc;
     }, {});
@@ -127,7 +123,7 @@ const Dashboard = () => {
 
   const calculateVehicleCCDistributionByZone = () => {
     const distribution = [];
-    const groupedByZoneAndCC = filteredItems.reduce((acc, item) => {
+    const groupedByZoneAndCC = filteredItems?.reduce((acc, item) => {
       const key = `${item.zone}_${item.vehicle_cc}`;
       acc[key] = (acc[key] || 0) + 1;
       return acc;
@@ -141,7 +137,7 @@ const Dashboard = () => {
 
   const calculateSDKIntDistributionByZone = () => {
     const distribution = [];
-    const groupedByZoneAndSDKInt = filteredItems.reduce((acc, item) => {
+    const groupedByZoneAndSDKInt = filteredItems?.reduce((acc, item) => {
       const key = `${item.zone}_${item.sdk_int}`;
       acc[key] = (acc[key] || 0) + 1;
       return acc;
@@ -154,6 +150,8 @@ const Dashboard = () => {
   };
 
   return (
+    <div>
+    {!data ? <Spinner/> :  
     <div className="dashboard-container">
       <div className="dashboard-controls">
         <input
@@ -206,7 +204,7 @@ const Dashboard = () => {
         </thead>
         <tbody>
           {filteredItems
-            .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+            ?.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
             .map((item, index) => (
               <tr key={index}>
                 <td>{item.username}</td>
@@ -282,8 +280,9 @@ const Dashboard = () => {
           />
         </div>
         </div>
+    </div>}
     </div>
-  );
+  )
 };
 
 export default Dashboard;
