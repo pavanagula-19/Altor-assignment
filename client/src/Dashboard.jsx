@@ -1,8 +1,8 @@
-// Dashboard.js
 import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import Piechart from './Piechart';
 import Barchart from './Barchart';
+import StackedBar from './Stackedbar'; 
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -36,30 +36,7 @@ const Dashboard = () => {
 
     fetchData();
   }, []);
-  const calculateVehicleBrandDistribution = () => {
-    // Calculate the distribution of the total number of vehicles over different vehicle brands
-    const distribution = [];
-    const groupedByBrand = filteredItems.reduce((acc, item) => {
-      acc[item.vehicle_brand] = (acc[item.vehicle_brand] || 0) + 1;
-      return acc;
-    }, {});
-    for (const brand in groupedByBrand) {
-      distribution.push({ vehicleBrand: brand, count: groupedByBrand[brand] });
-    }
-    return distribution;
-  };
-  const calculateSDKIntDistribution = () => {
-    // Calculate the distribution of the total number of devices over different SDK int values
-    const distribution = [];
-    const groupedBySDKInt = filteredItems.reduce((acc, item) => {
-      acc[item.sdk_int] = (acc[item.sdk_int] || 0) + 1;
-      return acc;
-    }, {});
-    for (const sdkInt in groupedBySDKInt) {
-      distribution.push({ sdkInt, count: groupedBySDKInt[sdkInt] });
-    }
-    return distribution;
-  };
+
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -120,6 +97,58 @@ const Dashboard = () => {
         </option>
       )),
     ];
+  };
+
+  const calculateVehicleBrandDistribution = () => {
+    const distribution = [];
+    const groupedByBrand = filteredItems.reduce((acc, item) => {
+      acc[item.vehicle_brand] = (acc[item.vehicle_brand] || 0) + 1;
+      return acc;
+    }, {});
+    for (const brand in groupedByBrand) {
+      distribution.push({ vehicleBrand: brand, count: groupedByBrand[brand] });
+    }
+    return distribution;
+  };
+
+  const calculateSDKIntDistribution = () => {
+    const distribution = [];
+    const groupedBySDKInt = filteredItems.reduce((acc, item) => {
+      acc[item.sdk_int] = (acc[item.sdk_int] || 0) + 1;
+      return acc;
+    }, {});
+    for (const sdkInt in groupedBySDKInt) {
+      distribution.push({ sdkInt, count: groupedBySDKInt[sdkInt] });
+    }
+    return distribution;
+  };
+
+  const calculateVehicleCCDistributionByZone = () => {
+    const distribution = [];
+    const groupedByZoneAndCC = filteredItems.reduce((acc, item) => {
+      const key = `${item.zone}_${item.vehicle_cc}`;
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+    for (const key in groupedByZoneAndCC) {
+      const [zone, vehicleCC] = key.split('_');
+      distribution.push({ zone, vehicleCC, count: groupedByZoneAndCC[key] });
+    }
+    return distribution;
+  };
+
+  const calculateSDKIntDistributionByZone = () => {
+    const distribution = [];
+    const groupedByZoneAndSDKInt = filteredItems.reduce((acc, item) => {
+      const key = `${item.zone}_${item.sdk_int}`;
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+    for (const key in groupedByZoneAndSDKInt) {
+      const [zone, sdkInt] = key.split('_');
+      distribution.push({ zone, sdkInt, count: groupedByZoneAndSDKInt[key] });
+    }
+    return distribution;
   };
 
   return (
@@ -199,27 +228,60 @@ const Dashboard = () => {
         />
       </div>
       <div className="charts-container">
-        <Piechart title="Device Brand Distribution" data={calculateDistribution('device_brand')} />
-        <Piechart title="Vehicle Brand Distribution" data={calculateDistribution('vehicle_brand')} />
-        <Piechart title="Vehicle CC Distribution" data={calculateDistribution('vehicle_cc')} />
+        <div className="pie-chart-container">
+          <Piechart title="Device Brand Distribution" data={calculateDistribution('device_brand')} />
+        </div>
+        <div className="pie-chart-container">
+          <Piechart title="Vehicle Brand Distribution" data={calculateDistribution('vehicle_brand')} />
+        </div>
+        <div className="pie-chart-container">
+          <Piechart title="Vehicle CC Distribution" data={calculateDistribution('vehicle_cc')} />
+        </div>
       </div>
-      <div>
-      <Barchart
-          title="Vehicle Brand Distribution by Zone"
-          data={calculateVehicleBrandDistribution()}
-          xKey="vehicleBrand"
-          yKey="count"
-        />
-
-        <Barchart
-          title="SDK Int Distribution by Zone"
-          data={calculateSDKIntDistribution()}
-          xKey="sdkInt"
-          yKey="count"
-        />
+      <div className="charts-container">
+        <div className="barchart-container">
+          <Barchart
+            title="Vehicle Brand Distribution by Zone"
+            data={calculateVehicleBrandDistribution()}
+            xKey="vehicleBrand"
+            yKey="count"
+          />
+        </div>
+        <div className="barchart-container">
+          <Barchart
+            title="SDK Int Distribution by Zone"
+            data={calculateSDKIntDistribution()}
+            xKey="sdkInt"
+            yKey="count"
+          />
+        </div>
       </div>
+      <div className="charts-container">
+        <div className="stackedbar-container">
+          <StackedBar
+            title="Vehicle CC Distribution by Zone"
+            data={calculateVehicleCCDistributionByZone()}
+            xKey="zone"
+            bars={[
+              { dataKey: '0', color: '#8884d8' },
+              { dataKey: '1', color: '#82ca9d' },
+              // Add more bars if you have additional vehicle CC values
+            ]}
+          />
+        </div>
+        <div className="stackedbar-container">
+          <StackedBar
+            title="SDK Int Distribution by Zone"
+            data={calculateSDKIntDistributionByZone()}
+            xKey="zone"
+            bars={[
+              { dataKey: '22', color: '#8884d8' },
+              { dataKey: '23', color: '#82ca9d' },
+            ]}
+          />
+        </div>
+        </div>
     </div>
-    
   );
 };
 
