@@ -1,6 +1,6 @@
-// Dashboard.js
 import React, { useState, useEffect } from 'react';
 import './Dashboard.css'; // Import your CSS file
+import ReactPaginate from 'react-paginate';
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -12,6 +12,8 @@ const Dashboard = () => {
     vehicleCC: '',
     sdkInt: '',
   });
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +56,12 @@ const Dashboard = () => {
   };
 
   const filteredItems = applyFilters();
+
+  const pageCount = Math.ceil(filteredItems.length / itemsPerPage);
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
 
   const renderDropdownOptions = (uniqueValues) => {
     return [
@@ -120,18 +128,30 @@ const Dashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredItems.map((item, index) => (
-            <tr key={index}>
-              <td>{item.username}</td>
-              <td>{item.zone}</td>
-              <td>{item.device_brand}</td>
-              <td>{item.sdk_int}</td>
-              <td>{item.vehicle_brand}</td>
-              <td>{item.vehicle_cc}</td>
-            </tr>
-          ))}
+          {filteredItems
+            .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+            .map((item, index) => (
+              <tr key={index}>
+                <td>{item.username}</td>
+                <td>{item.zone}</td>
+                <td>{item.device_brand}</td>
+                <td>{item.sdk_int}</td>
+                <td>{item.vehicle_brand}</td>
+                <td>{item.vehicle_cc}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
+      <div className="pagination">
+        <ReactPaginate
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={'pagination'}
+          activeClassName={'active'}
+        />
+      </div>
     </div>
   );
 };

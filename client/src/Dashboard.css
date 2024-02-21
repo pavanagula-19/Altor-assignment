@@ -38,3 +38,31 @@
   background-color: #f5f5f5;
   transition: background-color 0.3s;
 }
+
+/* Dashboard.css */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination a {
+  color: #007bff;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  margin: 0 5px;
+  border-radius: 50%; /* Use 50% for a fully rounded button */
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination .active {
+  background-color: rgb(221, 137, 137);
+  color: #fff;
+  border-radius: 50%; /* Use 50% for a fully rounded button */
+}
